@@ -43,13 +43,15 @@ func main() {
 	//Modulo Http
 	http.Handle("/socket.io/", server)
 	http.Handle("/", http.FileServer(http.Dir("./public")))
-	log.Println("Server on Port 3000")
+	log.Println("http://http:/localhost:3000")
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
 
 func thread(server *socketio.Server) {
 
 	for {
+
+		// ************v RAM v************
 
 		nombreArchivo := "/proc/meminfo"
 		bytesLeidos, err := ioutil.ReadFile(nombreArchivo)
@@ -61,18 +63,26 @@ func thread(server *socketio.Server) {
 		//fmt.Printf("El contenido del archivo es:\n%s", contenido)
 		vectord := strings.Split(contenido, "\n")
 
-		ramDisponible := strings.Replace((vectord[2])[15:len(vectord[2])-2], " ", "", -1)
+		ramTotal := strings.Replace((vectord[0])[10:len(vectord[0])-2], " ", "", -1)
 		ramLibre := strings.Replace((vectord[1])[10:len(vectord[1])-2], " ", "", -1)
+		ramDisponible := strings.Replace((vectord[2])[15:len(vectord[2])-2], " ", "", -1)
 
+		total, err0 := strconv.Atoi(ramTotal)
 		disponible, err1 := strconv.Atoi(ramDisponible)
 		libre, err2 := strconv.Atoi(ramLibre)
 		enUso := 0
 
-		if err1 == nil && err2 == nil {
+		if err1 == nil && err2 == nil && err0 == nil {
+			total = total / 1024
 			disponible = disponible / 1024
 			libre = libre / 1024
 			enUso = disponible - libre
 		}
+
+		server.BroadcastToRoom("", "chat_room", "valores ram", total, libre, disponible, enUso)
+
+		// ************v CPU v************
+
 		/////-----
 		out, err := exec.Command("mpstat").Output()
 		if err != nil {
@@ -83,9 +93,10 @@ func thread(server *socketio.Server) {
 		cpuLibre := (vectorcpu[3])[len(vectorcpu[3])-6:]
 		//fmt.Printf("The date is.............> %s\n", (vectorcpu[3])[len(vectorcpu[3])-6:])
 		///-------
-		fmt.Print(enUso)
-		server.BroadcastToRoom("", "chat_room", "chat message", cpuLibre, ramLibre, ramDisponible)
-		fmt.Println("Este es el hilo número")
+		//fmt.Print(enUso)
+		server.BroadcastToRoom("", "chat_room", "chat message", cpuLibre, cpuLibre, ramDisponible)
+
+		//fmt.Println("Este es el hilo número")
 		time.Sleep(1 * time.Second)
 	}
 	//Para simular una carga de trabajo
