@@ -6,9 +6,9 @@ var graph_cpu = new Morris.Line({
     // ID del elemento para dibujar la gráfica
     element: 'mi-div-cpu',
     data: data_cpu,
-    xkey: 'year',
-    ykeys: ['value'],
-    labels: ['Value'],
+    xkey: 'no',
+    ykeys: ['Valor'],
+    labels: ['Valor'],
     ymin: 'auto',
     ymax: 'auto',
     parseTime: false,
@@ -21,7 +21,7 @@ var graph_cpu = new Morris.Line({
 function actualizar_data_cpu(yyy,vvv) {
     // mantener vector con no mas de 30 datos
     if (data_cpu.length > 30) data_cpu.shift();
-    data_cpu.push({ year: ""+yyy.toFixed(3), value: vvv });
+    data_cpu.push({ no: ""+yyy.toFixed(3), Valor: vvv });
     graph_cpu.setData(data_cpu);
 }
 
@@ -35,8 +35,8 @@ var graph_ram = new Morris.Line({
     element: 'mi-div-ram',
     data: data_ram,
     xkey: 'year',
-    ykeys: ['value'],
-    labels: ['Value'],
+    ykeys: ['Valor'],
+    labels: ['Valor'],
     ymin: 'auto',
     ymax: 'auto',
     parseTime: false,
@@ -49,6 +49,6 @@ var graph_ram = new Morris.Line({
 function actualizar_data_ram(yyy,vvv) {
     // mantener vector con no mas de 30 datos
     if (data_ram.length > 30) data_ram.shift();
-    data_ram.push({ year: ""+yyy.toFixed(3), value: vvv });
+    data_ram.push({ year: ""+yyy.toFixed(3), Valor: vvv });
     graph_ram.setData(data_ram);
 }

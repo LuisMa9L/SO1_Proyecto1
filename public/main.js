@@ -17,12 +17,12 @@ socket.on('valores ram', function (total, libre, disponible, enUso) {
     var mvv = (parseFloat(disponible)-parseFloat(libre))/1024;
 
     //console.log('msg:',msg,'libre:',libre,'disponible',disponible,'::',mvv);
-    let valor = enUso;
+    let valor = total - enUso - disponible;
     let e_ram_total = document.getElementById('ram_total');
     e_ram_total.innerHTML= `<span class="fa fa-arrow-circle-right"></span> Memoria total: ${total} MB<br>`
     
     e_ram_total = document.getElementById('ram_consumida');
-    e_ram_total.innerHTML= `<span class="fa fa-arrow-circle-right"></span> Memoria consumida: ${enUso} MB`
+    e_ram_total.innerHTML= `<span class="fa fa-arrow-circle-right"></span> Memoria consumida: ${valor} MB`
     
     e_ram_total = document.getElementById('ram_porcentaje');
     let v_porcentaje = enUso / total * 100;
@@ -30,6 +30,69 @@ socket.on('valores ram', function (total, libre, disponible, enUso) {
 
     actualizar_data_ram(conta_x_ram++,valor.toFixed(3));
 })
+
+socket.on('pro tabla', function (msg) { 
+    //console.log("hm;vXDXDXD");
+    GenerarTabla(msg);
+    //console.log("---->",msg);
+})
+socket.on('pp', function (msg) { 
+    
+    //console.log("---->",msg);
+})
+
+function GenerarTabla(datos) {
+    let cont_ejecucion = 0;
+    let cont_suspendidos = 0;
+    let cont_detenidos = 0;
+    let cont_zombi = 0;
+
+    tabla_ht = '<tbody>';
+    tabla_ht = `<thead><tr><th>Pid</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>Ram</th></tr></thead>`;
+    for (let index = 0; index < datos.length; index++) {
+        const fila = datos[index];
+        
+        fila_ht = '';
+        for (let indice = 0; indice < fila.length; indice++) {
+            const dato = fila[indice];
+            
+            fila_ht += `<td>${dato}</td>`;
+
+            if (indice != 3 ) continue;
+            switch (dato) {
+                case 'State:	R (running)':
+                    cont_ejecucion++;
+                    break;
+                default:
+                    cont_suspendidos++;
+                    break;
+            }
+        }
+        tabla_ht += `<tr>${fila_ht}</tr>`;
+    }
+    tabla_ht += '</tbody>';
+
+    e_tabla = document.getElementById('mi_tabla');
+    e_tabla.innerHTML= tabla_ht;
+
+    // Datos generales de la tabla
+
+    let e_ram_total = document.getElementById('pro_cantidad');
+    e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Cantidad de procesos: ` + datos.length
+
+    e_ram_total = document.getElementById('pro_ejecucion');
+    e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Procesos en ejecución:` + cont_ejecucion
+
+    e_ram_total = document.getElementById('pro_suspendidos');
+    e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Procesos suspendidos:` + cont_suspendidos
+
+    e_ram_total = document.getElementById('pro_detenidos');
+    e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Procesos detenidos:` + cont_detenidos
+
+    e_ram_total = document.getElementById('pro_zombie');
+    e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Procesos zombie:` + cont_zombi
+}
+
 
 /* 
 new Vue({

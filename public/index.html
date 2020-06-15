@@ -9,6 +9,46 @@
 			-webkit-border-radius: 19px 19px 19px 19px;
 			border: 0px solid #000000;
 		}
+		table.greyGridTable {
+			border: 2px solid #FFFFFF;
+			width: 100%;
+			text-align: center;
+			border-collapse: collapse;
+		}
+		table.greyGridTable td, table.greyGridTable th {
+			border: 1px solid #FFFFFF;
+			padding: 3px 4px;
+		}
+		table.greyGridTable tbody td {
+			font-size: 13px;
+		}
+		table.greyGridTable td:nth-child(even) {
+			background: #EBEBEB;
+		}
+		table.greyGridTable thead {
+			background: #FFFFFF;
+			border-bottom: 4px solid #333333;
+		}
+		table.greyGridTable thead th {
+			font-size: 15px;
+			font-weight: bold;
+			color: #333333;
+			text-align: center;
+			border-left: 2px solid #333333;
+		}
+		table.greyGridTable thead th:first-child {
+			border-left: none;
+		}
+
+table.greyGridTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  border-top: 4px solid #333333;
+}
+table.greyGridTable tfoot td {
+  font-size: 14px;
+}
 		</style>
     <meta charset="utf-8">
     <meta name="keywords" content="">
@@ -119,8 +159,20 @@
 				<h1 class="mg-md tc-black text-lg-center">
 					Procesos
 				</h1>
-				<h3 class="mg-md tc-outer-space">
-					<span class="fa fa-caret-right"></span> Heading content
+				<h3 id="pro_cantidad" class="mg-md tc-outer-space">
+					<span class="fa fa-caret-right"></span> Cantidad de procesos:
+				</h3>
+				<h3 id="pro_ejecucion" class="mg-md tc-outer-space">
+					<span class="fa fa-caret-right"></span> Procesos en ejecución:
+				</h3>
+				<h3 id="pro_suspendidos" class="mg-md tc-outer-space">
+					<span class="fa fa-caret-right"></span> Procesos suspendidos:
+				</h3>
+				<h3 id="pro_detenidos" class="mg-md tc-outer-space">
+					<span class="fa fa-caret-right"></span> Procesos detenidos:
+				</h3>
+				<h3 id="pro_zombie" class="mg-md tc-outer-space">
+					<span class="fa fa-caret-right"></span> Procesos zombie:
 				</h3>
 			</div>
 		</div>
@@ -134,6 +186,42 @@
 		<div class="row">
 			<div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
 				<div id="mi-div-tabla">
+					<table class="greyGridTable" id="mi_tabla">
+						<thead>
+						<tr>
+						<th>head1</th>
+						<th>head2</th>
+						<th>head3</th>
+						<th>head4</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+						<td>cell1_1</td>
+						<td>cell2_1</td>
+						<td>cell3_1</td>
+						<td>cell4_1</td>
+						</tr>
+						<tr>
+						<td>cell1_2</td>
+						<td>cell2_2</td>
+						<td>cell3_2</td>
+						<td>cell4_2</td>
+						</tr>
+						<tr>
+						<td>cell1_3</td>
+						<td>cell2_3</td>
+						<td>cell3_3</td>
+						<td>cell4_3</td>
+						</tr>
+						<tr>
+						<td>cell1_4</td>
+						<td>cell2_4</td>
+						<td>cell3_4</td>
+						<td>cell4_4</td>
+						</tr>
+						</tbody>
+						</table>
 				</div>
 			</div>
 		</div>

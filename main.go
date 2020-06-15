@@ -60,7 +60,6 @@ func thread(server *socketio.Server) {
 		}
 
 		contenido := string(bytesLeidos)
-		//fmt.Printf("El contenido del archivo es:\n%s", contenido)
 		vectord := strings.Split(contenido, "\n")
 
 		ramTotal := strings.Replace((vectord[0])[10:len(vectord[0])-2], " ", "", -1)
@@ -83,7 +82,6 @@ func thread(server *socketio.Server) {
 
 		// ************v CPU v************
 
-		/////-----
 		out, err := exec.Command("mpstat").Output()
 		if err != nil {
 			log.Fatal(err)
@@ -91,16 +89,65 @@ func thread(server *socketio.Server) {
 		salida := fmt.Sprintf("%s", out)
 		vectorcpu := strings.Split(salida, "\n")
 		cpuLibre := (vectorcpu[3])[len(vectorcpu[3])-6:]
-		//fmt.Printf("The date is.............> %s\n", (vectorcpu[3])[len(vectorcpu[3])-6:])
-		///-------
-		//fmt.Print(enUso)
 		server.BroadcastToRoom("", "chat_room", "chat message", cpuLibre, cpuLibre, ramDisponible)
 
-		//fmt.Println("Este es el hilo número")
 		time.Sleep(1 * time.Second)
+
+		// ************v Procesos v************
+		out, err = exec.Command("ls", "/proc").Output()
+		salida = fmt.Sprintf("%s", out)
+		vector := strings.Split(salida, "acpi")[0]
+		vectord = strings.Split(vector, "\n")
+		//re := regexp.MustCompile(`[\n]+`)
+		//fmt.Println(re.ReplaceAllString(vector, ","))
+		//fmt.Println(vectord)
+		test := [][]string{}
+		for i := 0; i < len(vectord)-1; i++ {
+			nombreArchivo := "/proc/" + vectord[i] + "/status"
+			bytesLeidos, err = ioutil.ReadFile(nombreArchivo)
+			if err != nil {
+				fmt.Printf("Error leyendo archivo: %v\n", err)
+				break
+			}
+			//contenido := string(bytesLeidos)
+			//vectord = strings.Split(contenido, "\n")
+
+			contenido := string(bytesLeidos)
+			vectord := strings.Split(contenido, "\n")
+
+			//re := regexp.MustCompile(`f[^\n]*`)
+			proNombre := vectord[0]
+			proEstado := vectord[2]
+			proUsuario := vectord[8]
+			proPid := vectord[5]
+			proTam := vectord[17]
+
+			test = append(test, []string{proPid, proNombre, proUsuario, proEstado, proTam})
+			//test = append(test, []string{nombreArchivo, proNombre, proEstado})
+			fmt.Println(nombreArchivo)
+		}
+		server.BroadcastToRoom("", "chat_room", "pro tabla", test)
+		server.BroadcastToRoom("", "chat_room", "pp", "ppppppp")
 	}
 	//Para simular una carga de trabajo
 	//dormimos el programa x cantidad de segundo
 	//donde x puede ir de x a 100
 
 }
+
+/*
+
+
+
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	re := regexp.MustCompile(`f[^\n]*`)
+	fmt.Printf("%q\n", re.FindAll([]byte(`sea(food) fool`), -1))
+
+}*/
