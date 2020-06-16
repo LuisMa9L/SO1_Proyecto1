@@ -59,4 +59,4 @@ static void salir(void)
 }
  
 module_init(iniciar);
-module_exit(salir); 
+module_exit(salir);

@@ -48,26 +48,36 @@ function GenerarTabla(datos) {
     let cont_zombi = 0;
 
     tabla_ht = '<tbody>';
-    tabla_ht = `<thead><tr><th>Pid</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>Ram</th></tr></thead>`;
+    tabla_ht = `<thead><tr><th>Pid</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>Ram kB</th><th>Kill</th></tr></thead>`;
     for (let index = 0; index < datos.length; index++) {
         const fila = datos[index];
         
         fila_ht = '';
+        let mi_pid = "---";
         for (let indice = 0; indice < fila.length; indice++) {
             const dato = fila[indice];
-            
+            if (indice == 0) {
+                mi_pid = dato;
+            }
             fila_ht += `<td>${dato}</td>`;
 
             if (indice != 3 ) continue;
             switch (dato) {
-                case 'State:	R (running)':
+                case '(running)':
                     cont_ejecucion++;
                     break;
-                default:
+                case '(sleeping)':
                     cont_suspendidos++;
+                    break;
+                case '(idle)':
+                    cont_detenidos++;
+                    break;
+                default:
+                    cont_zombi++;
                     break;
             }
         }
+        fila_ht+= `<td>${GenerarBoton(mi_pid)}</td>`;
         tabla_ht += `<tr>${fila_ht}</tr>`;
     }
     tabla_ht += '</tbody>';
@@ -91,6 +101,10 @@ function GenerarTabla(datos) {
 
     e_ram_total = document.getElementById('pro_zombie');
     e_ram_total.innerHTML= `<span class="fa fa-caret-right"></span> Procesos zombie:` + cont_zombi
+}
+
+function GenerarBoton(pid) {
+    return `<a href="killer?idUs=${pid}"><button>KILL</button></a>`
 }
 
 
