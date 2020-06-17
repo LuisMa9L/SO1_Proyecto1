@@ -106,12 +106,25 @@ func thread(server *socketio.Server) {
 		//fmt.Println(vectord)
 		test := [][]string{}
 		for i := 0; i < len(vectord)-1; i++ {
-			nombreArchivo := "/proc/" + vectord[i] + "/status"
-			bytesLeidos, err = ioutil.ReadFile(nombreArchivo)
+
+			// ************v Archivo status v************
+
+			nombreArchivoStatus := "/proc/" + vectord[i] + "/status"
+			nombreArchivoChildren := "/proc/" + vectord[i] + "/task/" + vectord[i] + "/children"
+			bytesLeidos, err = ioutil.ReadFile(nombreArchivoStatus)
 			if err != nil {
 				fmt.Printf("Er archivo: %v\n", err)
-				break
+				continue
 			}
+
+			bytesLeidosHijos, err := ioutil.ReadFile(nombreArchivoChildren)
+			if err != nil {
+				fmt.Printf("Er archivo h: %v\n", err)
+				continue
+			}
+			contenidoHijos := string(bytesLeidosHijos)
+			fmt.Println("hi_>", contenidoHijos)
+
 			//contenido := string(bytesLeidos)
 			//vectord = strings.Split(contenido, "\n")
 
@@ -140,7 +153,7 @@ func thread(server *socketio.Server) {
 			vState = re2.FindAll([]byte(proTam), -1)
 			proTam = string(vState[0])
 
-			test = append(test, []string{proPid, proNombre, proUsuario, proEstado, proTam})
+			test = append(test, []string{proPid, proNombre, proUsuario, proEstado, proTam, contenidoHijos})
 			//test = append(test, []string{nombreArchivo, proNombre, proEstado})
 			//fmt.Println(nombreArchivo)
 		}

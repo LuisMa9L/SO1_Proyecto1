@@ -48,7 +48,7 @@ function GenerarTabla(datos) {
     let cont_zombi = 0;
 
     tabla_ht = '<tbody>';
-    tabla_ht = `<thead><tr><th>Pid</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>Ram kB</th><th>Kill</th></tr></thead>`;
+    tabla_ht = `<thead><tr><th>Pid</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>Ram kB</th><th>Hijos</th><th>Kill</th></tr></thead>`;
     for (let index = 0; index < datos.length; index++) {
         const fila = datos[index];
         
